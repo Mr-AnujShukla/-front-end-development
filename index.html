@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+  <!-- 
+    The objective of this assignment is to evaluate your front-end development skills, specifically in implementing a drag and drop interface. You are required to build a simple web page that allows users to drag and drop items between two containers.    
+    
+    code by Anuj Shukla!
+   -->
+
+<head>
+  <style>
+    .container-wrapper {
+      display: flex;
+    }
+    /* two div which are visible adjacent to each other */
+    .container {
+      flex: 1;
+      border: 2px solid #4847475f;
+    }
+    /* anything like image, icon or text is reffered to as item */
+    .item {
+      background-color: #edbf7a;
+      padding: 10px;
+      margin: 10px;
+      cursor: move;
+    }
+
+    .droppable {
+      background-color: #e9e9e9b7;
+      min-height: 100px;
+      padding: 10px;
+    }
+    /* styling body */
+    body {
+      background-color: rgba(0, 255, 174, 0.893);
+    }
+  	/* for button */
+    button {
+      border-radius: 8px;
+      padding: 10px;
+    }
+
+    button:hover {
+      background-color: red;
+    }
+
+    /* Styles for the dragged item */
+    .item.dragging {
+      opacity: 0.5;
+      transform: scale(1.2);
+    }
+  </style>
+</head>
+
+<body>
+  <p>Greetings,</p>
+  <ul>
+    <li>
+      This is a simple webpage which show the implementation of drag and drop functionality between two containers.
+    </li>
+    <li>Here item refers to as any thing ie images,text or icons, which is placed on container 1 ie Box1 and dragged and
+      dropped to Box2.
+    </li>
+    <li>You can also place 1 item into another + you can drag multiple time from container1 and arrange as you want in
+      container2.
+    </li>
+    <li>
+      This will also show display which item is dropped.
+    </li>
+  </ul>
+
+  <div class="container-wrapper">
+    <div class="container">
+      <div id="container1" class="droppable">
+        <!-- List of items -->
+        <div class="item" draggable="true">Item 1</div>
+        <div class="item" draggable="true">Item 2</div>
+        <!-- <div class="item" draggable="true">Item 3</div> -->
+      </div>
+      <div align="center">Box1</div>
+    </div>
+    <div class="container">
+      <div id="container2" class="droppable"></div>
+      <div align="center">Box2</div>
+    </div>
+  </div>
+
+  <button onclick="resetContainers()">Reset</button><br>
+  <div>
+    <p>Hope you like it! <br>
+      created by Anuj Shukla.
+    </p>
+  </div>
+  <script>
+    // Get the elements
+    var container1 = document.getElementById('container1');
+    var container2 = document.getElementById('container2');
+    var draggingItem = null;
+
+    // Add event listeners for drag and drop
+    container1.addEventListener('dragstart', dragStart);
+    container2.addEventListener('dragover', dragOver);
+    container2.addEventListener('dragenter', dragEnter);
+    container2.addEventListener('dragleave', dragLeave);
+    container2.addEventListener('drop', drop);
+
+    // Function to handle the dragstart event
+    function dragStart(event) {
+      // Set the data being dragged (in this case, the item's text content)
+      event.dataTransfer.setData('text/plain', event.target.textContent);
+      // Set the draggingItem variable to the current dragged item
+      draggingItem = event.target;
+      // Add a class to the dragged item for visual feedback
+      draggingItem.classList.add('dragging');
+    }
+
+    // Function to handle the dragover event
+    function dragOver(event) {
+      // Prevent the default behavior which would not allow dropping
+      event.preventDefault();
+    }
+
+    // Function to handle the dragenter event
+    function dragEnter(event) {
+      // Add a class to the drop target for visual feedback
+      event.target.classList.add('drag-enter');
+    }
+
+    // Function to handle the dragleave event
+    function dragLeave(event) {
+      // Remove the class from the drop target
+      event.target.classList.remove('drag-enter');
+    }
+
+    // Function to handle the drop event
+    function drop(event) {
+      // Remove the class from the drop target
+      event.target.classList.remove('drag-enter');
+      // Get the data being dropped (in this case, the item's text content)
+      var data = event.dataTransfer.getData('text/plain');
+      // Create a new item with the dropped data
+      var newItem = document.createElement('div');
+      newItem.className = 'item';
+      newItem.textContent = data;
+      // Append the new item to the second container
+      event.target.appendChild(newItem);
+
+      // Display success message
+      alert(data + ' dropped successfully!');
+      
+    }
+
+    // now lets make function to reset
+    function resetContainers() {
+      // Clear the second container
+      container2.innerHTML = '';
+      // Remove the dragging class from the original items
+      var originalItems = container1.querySelectorAll('.item');
+      for (var i = 0; i < originalItems.length; i++) {
+        originalItems[i].classList.remove('dragging');
+      }
+    }
+  </script>
+</body>
+
+</html>
